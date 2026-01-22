@@ -1,6 +1,6 @@
 import React, {createContext, useEffect} from "react";
 
-export const ThemeContext=createContext();
+export const ThemeContext = createContext();
 const ThemeProvider = ({children}) => {
     const [isDark, setIsDark] = React.useState(false);
 
@@ -10,7 +10,7 @@ const ThemeProvider = ({children}) => {
         } else {
             document.documentElement.classList.remove("dark");
         }
-    },[isDark]);
+    }, [isDark]);
     return (
         <ThemeContext.Provider value={{isDark, setIsDark}}>
             {children}

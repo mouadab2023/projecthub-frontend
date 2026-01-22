@@ -1,7 +1,8 @@
 import React, {useContext} from "react";
 import {ThemeContext} from "../providers/ThemeProvider";
+
 const Header = () => {
-    const {isDark, setIsDark} =useContext(ThemeContext);
+    const {isDark, setIsDark} = useContext(ThemeContext);
 
     return (
         <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-500">
@@ -23,7 +24,7 @@ const Header = () => {
                             Dashboard
                         </a>
                         <a
-                                className="text-gray-800 dark:text-gray-100 hover:text-yellow-500 dark:hover:text-purple-400 transition-colors duration-300 font-medium"
+                            className="text-gray-800 dark:text-gray-100 hover:text-yellow-500 dark:hover:text-purple-400 transition-colors duration-300 font-medium"
                         >
                             Projects
                         </a>

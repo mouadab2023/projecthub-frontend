@@ -2,12 +2,26 @@ import React from "react";
 import AuthForm from "./AuthForm";
 import Input from "../Utilis/Input";
 import useRegister from "../../hooks/useRegister";
+
 const Register = () => {
     const {
-        firstName,firstNameError,lastName,lastNameError,email,emailError,
-        password,passwordError,confirmPassword,confirmPasswordError,
-        handleFirstNameInput,handleLastNameInput,handleMailInput,handlePasswordInput,handleConfirmationPasswordInput,
-        canSubmit,handleFormSubmit,
+        firstName,
+        firstNameError,
+        lastName,
+        lastNameError,
+        email,
+        emailError,
+        password,
+        passwordError,
+        confirmPassword,
+        confirmPasswordError,
+        handleFirstNameInput,
+        handleLastNameInput,
+        handleMailInput,
+        handlePasswordInput,
+        handleConfirmationPasswordInput,
+        canSubmit,
+        handleFormSubmit,
     } = useRegister();
     return (
         <AuthForm
