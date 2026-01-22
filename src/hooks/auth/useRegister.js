@@ -1,4 +1,6 @@
 import {useState} from "react";
+import {emailIsValid,passwordIsValid,nameIsValid} from "../utils/authUtils";
+
 
 const useRegister = () => {
     const [firstName, setFirstName] = useState("")
@@ -7,27 +9,14 @@ const useRegister = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
-    const emailIsValid = (email) => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email);
-    }
-    const NameIsValid = (name) => {
-        const regex = /^[a-zA-Z]{2,}$/;
-        return regex.test(name);
-    }
-    const passwordIsValid = (password) => {
-        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/;
-        return regex.test(password);
-
-    }
     const canSubmit = firstName.length > 0 && lastName.length > 0 &&
         emailIsValid(email) &&
         passwordIsValid(password) &&
         password === confirmPassword
 
-    const firstNameError = !NameIsValid(firstName) && firstName.length > 0 ?
+    const firstNameError = !nameIsValid(firstName) && firstName.length > 0 ?
         "The first name must be at least 2 characters" : "";
-    const lastNameError = !NameIsValid(lastName) && lastName.length > 0 ?
+    const lastNameError = !nameIsValid(lastName) && lastName.length > 0 ?
         "The last name must be at least 2 characters" : "";
     const emailError = !emailIsValid(email) && email.length > 0 ? "email is invalid" : "";
     const passwordError = !passwordIsValid(password) && password.length > 0 ?

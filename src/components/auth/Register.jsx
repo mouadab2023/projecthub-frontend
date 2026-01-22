@@ -1,7 +1,7 @@
 import React from "react";
 import AuthForm from "./AuthForm";
-import Input from "../Utilis/Input";
-import useRegister from "../../hooks/useRegister";
+import Input from "../utilis/Input";
+import useRegister from "../../hooks/auth/useRegister";
 
 const Register = () => {
     const {

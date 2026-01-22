@@ -1,8 +1,8 @@
 import React from "react";
 import AuthFooter from "./AuthFooter";
 import AuthForm from "./AuthForm";
-import Input from "../Utilis/Input";
-import useResetPassword from "../../hooks/useResetPassword";
+import Input from "../utilis/Input";
+import useResetPassword from "../../hooks/auth/useResetPassword";
 const ResetPassword = () => {
     const {email,emailError,handleMailInput,handleFormSubmit,canSubmit}=useResetPassword();
     return (

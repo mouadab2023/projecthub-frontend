@@ -1,9 +1,9 @@
 import React from "react";
-import Input from "../Utilis/Input";
+import Input from "../utilis/Input";
 import AuthForm from "./AuthForm";
 import {Link} from "react-router-dom";
 import AuthFooter from "./AuthFooter";
-import useLogin from "../../hooks/useLogin";
+import useLogin from "../../hooks/auth/useLogin";
 
 const Login = () => {
     const {email, emailError, password, canSubmit, handleFormSubmit, handleMailInput, handlePasswordInput} = useLogin();

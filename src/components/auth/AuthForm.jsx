@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Utilis/Button";
+import Button from "../utilis/Button";
 
 const AuthForm = ({introduction, title, onSubmit, children, submitLabel, canSubmit, footer}) => {
     return (

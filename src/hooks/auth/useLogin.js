@@ -1,14 +1,12 @@
 import {useState} from "react";
+import {emailIsValid} from "../utils/authUtils";
 
 const useLogin = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const emailIsValid = (email) => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email);
-    }
+
     const canSubmit = emailIsValid(email);
     const emailError = !emailIsValid(email) && email.length > 0 ? "email is invalid" : "";
 

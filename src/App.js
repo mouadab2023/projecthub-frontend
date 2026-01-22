@@ -2,10 +2,10 @@ import './App.css';
 import Header from "./components/Header";
 import ThemeProvider from "./providers/ThemeProvider";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Login from "./components/Auth/Login";
-import Register from "./components/Auth/Register";
-import Loading from "./components/Utilis/Loading";
-import ResetPassword from "./components/Auth/ResetPassword";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import Loading from "./components/utilis/Loading";
+import ResetPassword from "./components/auth/ResetPassword";
 import Page404 from "./components/Page404";
 
 function App() {
