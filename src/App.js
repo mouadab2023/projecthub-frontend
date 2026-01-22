@@ -6,6 +6,7 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Loading from "./components/Utilis/Loading";
 import ResetPassword from "./components/Auth/ResetPassword";
+import Page404 from "./components/Page404";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/loading" element={<Loading/>}/>
                         <Route path="/reset-password" element={<ResetPassword/>}/>
+                        <Route path="*" element={<Page404/>}/>
 
 
                     </Routes>
