@@ -2,8 +2,8 @@ import './App.css';
 import Header from "./components/Header";
 import ThemeProvider  from "./providers/ThemeProvider";
 import {BrowserRouter,Routes,Route} from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 
 function App() {
   return (
