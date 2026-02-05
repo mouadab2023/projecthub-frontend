@@ -1,9 +1,15 @@
-import React, {createContext, useEffect} from "react";
+import React, {createContext, useContext, useEffect} from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const ThemeContext = createContext();
 const ThemeProvider = ({children}) => {
-    const [isDark, setIsDark] = React.useState(false);
+    const {get,set} = useLocalStorage();
+    const [isDark, setIsDark] = React.useState(get("isDark")??false);
 
+    const setMode = (isDark) => {
+        setIsDark(isDark);
+        set("isDark",isDark);
+    }
     useEffect(() => {
         if (isDark) {
             document.documentElement.classList.add("dark");
@@ -12,7 +18,7 @@ const ThemeProvider = ({children}) => {
         }
     }, [isDark]);
     return (
-        <ThemeContext.Provider value={{isDark, setIsDark}}>
+        <ThemeContext.Provider value={{isDark, setIsDark:setMode}}>
             {children}
         </ThemeContext.Provider>
     )

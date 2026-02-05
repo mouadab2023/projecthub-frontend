@@ -1,12 +1,13 @@
 import React from "react";
-import Input from "../utilis/Input";
-import AuthForm from "./AuthForm";
+import Input from "../ui/Input";
+import AuthForm from "./components/AuthForm";
 import {Link} from "react-router-dom";
-import AuthFooter from "./AuthFooter";
+import AuthFooter from "./components/AuthFooter";
 import useLogin from "../../hooks/auth/useLogin";
+import ErrorMessage from "../ui/ErrorMessage";
 
 const Login = () => {
-    const {email, emailError, password, canSubmit, handleFormSubmit, handleMailInput, handlePasswordInput} = useLogin();
+    const {email, emailError, password, canSubmit, handleFormSubmit, handleMailInput, handlePasswordInput, errorMessage} = useLogin();
     return (
 
         <AuthForm
@@ -39,6 +40,8 @@ const Login = () => {
                 placeholder="••••••••"
                 onChange={handlePasswordInput}
             />
+
+           <ErrorMessage errorMessage={errorMessage} />
 
             <div className="flex justify-end text-sm">
                 <Link

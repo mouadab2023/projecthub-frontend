@@ -1,10 +1,11 @@
 import React from "react";
-import AuthFooter from "./AuthFooter";
-import AuthForm from "./AuthForm";
-import Input from "../utilis/Input";
+import AuthFooter from "./components/AuthFooter";
+import AuthForm from "./components/AuthForm";
+import Input from "../ui/Input";
 import useResetPassword from "../../hooks/auth/useResetPassword";
+import ErrorMessage from "../ui/ErrorMessage";
 const ResetPassword = () => {
-    const {email,emailError,handleMailInput,handleFormSubmit,canSubmit}=useResetPassword();
+    const {email,emailError,handleMailInput,handleFormSubmit,canSubmit,errorMessage}=useResetPassword();
     return (
 
         <AuthForm
@@ -30,8 +31,10 @@ const ResetPassword = () => {
                 onChange={handleMailInput}
                 errorMessage={emailError}
             />
-        </AuthForm>
 
+            <ErrorMessage message={errorMessage} />
+
+        </AuthForm>
     )
 }
 export default ResetPassword

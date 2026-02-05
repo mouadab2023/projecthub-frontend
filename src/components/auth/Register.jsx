@@ -1,7 +1,8 @@
 import React from "react";
-import AuthForm from "./AuthForm";
-import Input from "../utilis/Input";
+import AuthForm from "./components/AuthForm";
+import Input from "../ui/Input";
 import useRegister from "../../hooks/auth/useRegister";
+import ErrorMessage from "../ui/ErrorMessage";
 
 const Register = () => {
     const {
@@ -22,10 +23,11 @@ const Register = () => {
         handleConfirmationPasswordInput,
         canSubmit,
         handleFormSubmit,
+        errorMessage
     } = useRegister();
     return (
         <AuthForm
-            introduction="Join projectHub  🚀"
+                introduction="Join projectHub  🚀"
             title="Create your account to start managing your projects"
             submitLabel="Sign up"
             canSubmit={canSubmit}
@@ -73,6 +75,8 @@ const Register = () => {
                 errorMessage={confirmPasswordError}
                 onChange={handleConfirmationPasswordInput}
             />
+
+            <ErrorMessage errorMessage={errorMessage} />
 
         </AuthForm>
 
