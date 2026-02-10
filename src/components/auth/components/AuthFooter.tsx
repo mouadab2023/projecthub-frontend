@@ -1,7 +1,11 @@
 import React from "react";
 import {Link} from "react-router-dom";
-
-const AuthFooter = ({footerText, footerLinkLabel, footerLinkTo}) => {
+type Props = {
+    footerText: string;
+    footerLinkLabel:string;
+    footerLinkTo:string;
+}
+const AuthFooter = ({footerText, footerLinkLabel, footerLinkTo}:Props) => {
     return (
 
         <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">

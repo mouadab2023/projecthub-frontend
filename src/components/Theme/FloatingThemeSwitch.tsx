@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { ThemeContext } from "../../providers/ThemeProvider";
+import {useTheme} from "../../hooks/theme/useTheme";
 
 const FloatingThemeSwitch = () => {
-    const { isDark, setIsDark } = useContext(ThemeContext);
+    const { isDark, setIsDark } = useTheme();
 
     return (
         <div className="fixed bottom-16 right-16 z-50">

@@ -1,8 +1,15 @@
 import React, {useState} from "react";
 import { Eye, EyeOff } from "lucide-react";
 import ErrorMessage from "./ErrorMessage";
-
-const Input = ({value, name, type, errorMessage, placeholder, onChange}) => {
+type Props={
+    value: string;
+    name: string;
+    type: "text" | "password" | "email";
+    errorMessage?: string;
+    placeholder: string;
+    onChange: (e:React.ChangeEvent<HTMLInputElement>) => void;
+}
+const Input = ({value, name, type, errorMessage, placeholder, onChange}:Props) => {
     const [isHidden, setIsHidden] = useState(true);
     const isPassword= type === "password"
     return (

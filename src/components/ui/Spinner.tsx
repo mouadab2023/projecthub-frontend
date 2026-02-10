@@ -1,4 +1,8 @@
-const Spinner = ({ size = 64 }) => {
+import React from "react";
+type Props={
+    size?:number
+}
+const Spinner = ({ size = 64 }:Props) => {
     return (
         <div
             className="

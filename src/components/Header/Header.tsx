@@ -4,7 +4,7 @@ import AvatarDropDown from "./components/AvatarDropDown";
 import useAuth from "../../hooks/auth/useAuth";
 
 const Header = () => {
-    const { user,initialLoading } = useAuth()
+    const { user,initialLoading } = useAuth();
     return (
         <header
             className="
@@ -44,7 +44,7 @@ const Header = () => {
                     {/* CENTER — Navigation (toujours centrée) */}
                     <nav className="hidden md:flex justify-center space-x-12">
                         {["Dashboard", "Projects", "Profile"].map((item) => (
-                            <a
+                            <Link to={"/"+ item.toLowerCase()}
                                 key={item}
                                 className="
               relative text-sm font-medium cursor-pointer
@@ -57,7 +57,7 @@ const Header = () => {
             "
                             >
                                 {item}
-                            </a>
+                            </Link>
                         ))}
                     </nav>
 
@@ -85,7 +85,7 @@ const Header = () => {
                                 </Link>
                             ) : (
                                 <div className="flex items-center justify-center">
-                                    <AvatarDropDown size="w-11 h-11" />
+                                    <AvatarDropDown />
                                 </div>
                             )}
                         </div>

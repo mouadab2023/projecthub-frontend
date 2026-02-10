@@ -1,21 +1,23 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {emailIsValid,passwordIsValid,nameIsValid} from "../utils/authUtils";
 import authService from "../../services/authService";
+import type {UserRegister} from "../../types/user";
+import axios from "axios";
 
 
 const useRegister = () => {
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const [firstName, setFirstName] = useState<string>("")
+    const [lastName, setLastName] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [confirmPassword, setConfirmPassword] = useState<string>("")
     const [errorMessage,setErrorMessage] = useState("")
     const resetErrorMessage=()=>{
         if(errorMessage)
             setErrorMessage("");
     }
 
-    const canSubmit = firstName.length > 0 && lastName.length > 0 &&
+    const canSubmit:boolean= firstName.length > 0 && lastName.length > 0 &&
         emailIsValid(email) &&
         passwordIsValid(password) &&
         password === confirmPassword
@@ -30,47 +32,49 @@ const useRegister = () => {
     const confirmPasswordError = password !== confirmPassword && password.length > 0 && confirmPassword.length > 0 ?
         "The passwords do not match" : ""
 
-    const register = async (registerCreds) => {
+    const register = async (registerCreds:UserRegister) => {
         try {
             await authService.register(registerCreds);
-        } catch (err) {
-            if (err.response?.status === 409) {
-                if (err.response.data?.detail === "Username already used") {
-                    setErrorMessage("The email is already used");
+        } catch (err:unknown) {
+            if (axios.isAxiosError(err)) {
+                if (err.response?.status === 409) {
+                    if (err.response.data?.detail === "Username already used") {
+                        setErrorMessage("The email is already used");
+                    }
+                } else {
+                    setErrorMessage("Error occured, please try again later");
                 }
-            }else {
-                setErrorMessage("Error occured, please try again later");
             }
         }
     }
 
-    const handleFirstNameInput = (e) => {
+    const handleFirstNameInput = (e:React.ChangeEvent<HTMLInputElement>) => {
         resetErrorMessage()
         const newFirstName = e.target.value;
         setFirstName(newFirstName);
     }
-    const handleLastNameInput = (e) => {
+    const handleLastNameInput = (e:React.ChangeEvent<HTMLInputElement>) => {
         resetErrorMessage()
         const newLastName = e.target.value;
         setLastName(newLastName);
     }
 
-    const handleMailInput = (e) => {
+    const handleMailInput = (e:React.ChangeEvent<HTMLInputElement>) => {
         resetErrorMessage()
         const newEmail = e.target.value;
         setEmail(newEmail);
     }
 
-    const handlePasswordInput = (e) => {
+    const handlePasswordInput = (e:React.ChangeEvent<HTMLInputElement>) => {
         resetErrorMessage()
         setPassword(e.target.value);
     }
 
-    const handleConfirmationPasswordInput = (e) => {
+    const handleConfirmationPasswordInput = (e:React.ChangeEvent<HTMLInputElement>) => {
         resetErrorMessage()
         setConfirmPassword(e.target.value);
     }
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const registerCredentials = {
             firstName,
@@ -78,7 +82,7 @@ const useRegister = () => {
             email,
             password,
         }
-        register(registerCredentials)
+        register(registerCredentials);
     }
     return (
         {

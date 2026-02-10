@@ -32,7 +32,7 @@ const ResetPassword = () => {
                 errorMessage={emailError}
             />
 
-            <ErrorMessage message={errorMessage} />
+            <ErrorMessage errorMessage={errorMessage} />
 
         </AuthForm>
     )

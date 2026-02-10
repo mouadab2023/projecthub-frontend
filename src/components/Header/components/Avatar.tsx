@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-
-const Avatar = ({ avatarUrl, username }) => {
+type Props = {
+    avatarUrl: string | undefined;
+    userName: string | undefined;
+}
+const Avatar = ({ avatarUrl, userName }:Props) => {
     const [loaded, setLoaded] = useState(false);
     const src = avatarUrl || null;
 
@@ -11,7 +14,7 @@ const Avatar = ({ avatarUrl, username }) => {
         }
     }, [src]);
 
-    const fallbackLetter = username ? username.charAt(0).toUpperCase() : "U";
+    const fallbackLetter = userName ? userName.charAt(0).toUpperCase() : "U";
 
     return (
         <div className="relative w-10 h-10 rounded-full overflow-hidden cursor-pointer">

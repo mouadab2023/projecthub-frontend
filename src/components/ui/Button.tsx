@@ -1,9 +1,13 @@
 import React from "react";
-
-const Button = ({submitLabel, onClick, disabled}) => (
+type Props = {
+    submitLabel:string;
+    onClick?:(e:React.MouseEvent<HTMLButtonElement>) => void;
+    disabled:boolean;
+}
+const Button = ({submitLabel, onClick, disabled}:Props) => (
     <button
         disabled={disabled}
-        onClick={onClick}
+        onClick={e=>onClick?.(e) }
         className={`
         w-full py-3 rounded-lg font-semibold transition-all duration-200
         ${disabled

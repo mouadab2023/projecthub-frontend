@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, {type AxiosInstance} from "axios";
 
 const BaseURL = "http://localhost:8080";
-const axiosInstance = axios.create({
+const axiosInstance:AxiosInstance = axios.create({
     withCredentials: true,
     baseURL: BaseURL
 })

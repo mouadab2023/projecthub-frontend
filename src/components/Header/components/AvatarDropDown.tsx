@@ -1,18 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { User, Settings, LogOut } from "lucide-react";
 import Avatar from "./Avatar";
 import useAuth from "../../../hooks/auth/useAuth";
 import useLogout from "../../../hooks/auth/useLogout";
+import DropdownItem from "./DropdownItem";
+import Divider from "./Divider";
 
 export default function AvatarDropdown() {
     const {user} = useAuth();
     const {logout} = useLogout();
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
+    const [open, setOpen] = useState<boolean>(false);
+    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handler = (e) => {
-            if (ref.current && !ref.current.contains(e.target)) {
+        const handler = (e:MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
                 setOpen(false);
             }
         };
@@ -24,10 +26,10 @@ export default function AvatarDropdown() {
         <div ref={ref} className="relative inline-block">
 
             <button
-                onClick={() => setOpen((v) => !v)}
+                onClick={() => setOpen((v:boolean):boolean => !v)}
                 className="flex items-center gap-2 rounded-full ring-2 ring-transparent transition focus:outline-none"
             >
-                <Avatar avatarUrl={user?.avatarUrl} username={user?.firstName}  />
+                <Avatar avatarUrl={user?.avatarUrl} userName={user?.firstName}  />
                 <span className="hidden md:block min-w-[120px]">
                       {user ? (
                           <span className="font-semibold text-gray-800 dark:text-gray-100 truncate">
@@ -66,25 +68,5 @@ export default function AvatarDropdown() {
         </div>
     );
 }
-function DropdownItem({ icon: Icon, children, danger, onClick }) {
-    return (
-        <button
-            onClick={onClick}
-            className={`
-        w-full flex items-center gap-3 px-4 py-2 rounded-xl
-        text-sm font-medium text-left
-        transition-all duration-150
-        ${danger
-                ? "text-red-500 hover:bg-red-500/20"
-                : "hover:bg-gradient-to-r hover:from-purple-200/20 hover:via-pink-200/20 hover:to-blue-200/20 dark:hover:from-purple-700/20 dark:hover:via-pink-700/20 dark:hover:to-blue-700/20"}
-        hover:scale-105
-      `}
-        >
-            <Icon size={16} className="opacity-90" />
-            {children}
-        </button>
-    );
-}
-function Divider() {
-    return <div className="my-1 h-px bg-gray-200/30 dark:bg-white/20" />;
-}
+
+

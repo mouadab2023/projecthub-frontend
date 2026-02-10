@@ -1,12 +1,18 @@
-import React, {createContext, useContext, useEffect} from "react";
+import React, {createContext, type ReactNode, useEffect} from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
-
-export const ThemeContext = createContext();
-const ThemeProvider = ({children}) => {
-    const {get,set} = useLocalStorage();
+type ThemeContextType = {
+    isDark: boolean;
+    setIsDark: (isDark: boolean) => void;
+}
+type Props={
+    children:ReactNode
+}
+export const ThemeContext = createContext<ThemeContextType|null>(null);
+const ThemeProvider = ({children}:Props) => {
+    const {get,set} = useLocalStorage<boolean>();
     const [isDark, setIsDark] = React.useState(get("isDark")??false);
 
-    const setMode = (isDark) => {
+    const setMode = (isDark:boolean) => {
         setIsDark(isDark);
         set("isDark",isDark);
     }

@@ -1,18 +1,30 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {createContext, type ReactNode, useEffect, useState} from "react";
 import authService from "../services/authService";
-import axios from "axios";
+import axios, {type AxiosError} from "axios";
 import axiosInstance from "../services/api";
+import type {User,UserLogin} from "../types/user"
 
-export const AuthContext = createContext();
+type AuthContextType = {
+    user: User | null;
+    initialLoading: boolean;
+    setUser:React.Dispatch<React.SetStateAction<AuthContextType["user"]>>;
+    login:(credentials: UserLogin) => Promise<void>;
+    logout:() => Promise<void>;
+}
+type Props={
+    children:ReactNode;
+}
 
-const AuthProvider = ({children}) => {
-    const [jwtToken, setJwtToken] = useState(null);
-    const [expiresIn, setExpiresIn] = useState(null);
-    const [initialLoading, setInitialLoading] = useState(true);
+export const AuthContext = createContext<AuthContextType|null>(null);
 
-    const [user, setUser] = useState(null);
+const AuthProvider = ({children}:Props) => {
+    const [jwtToken, setJwtToken] = useState<string|null>(null);
+    const [expiresIn, setExpiresIn] = useState<number|null>(null);
+    const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
-    const login = async (creds) => {
+    const [user, setUser] = useState<User|null>(null);
+
+    const login = async (creds:UserLogin) => {
         try {
             const res = await authService.login(creds);
             setUser(res.data.user);
@@ -55,7 +67,7 @@ const AuthProvider = ({children}) => {
     useEffect(() => {
         axiosInstance.interceptors.request.use((config) => {
             const noAuthUrls = ["auth/login", "auth/signup"];
-            if (jwtToken && !noAuthUrls.includes(config.url)) {
+            if (jwtToken && (config.url && !noAuthUrls.includes(config.url))){
                 config.headers.Authorization = `Bearer ${jwtToken}`;
             }
             return config;
@@ -80,7 +92,7 @@ const AuthProvider = ({children}) => {
                         setExpiresIn(r.data.expiresIn)
                         error.config.headers.Authorization = `Bearer ${r.data.token}`;
                         return axiosInstance(error.config)
-                    }).catch( async err => {
+                    }).catch( async (err:AxiosError) => {
                         await logout();
                         return Promise.reject(err);
                     })
@@ -90,7 +102,7 @@ const AuthProvider = ({children}) => {
     }, [jwtToken]);
 
     return (<AuthContext.Provider value={{initialLoading,user, setUser, login, logout}}>
-            {children}
-        </AuthContext.Provider>)
+        {children}
+    </AuthContext.Provider>);
 }
 export default AuthProvider;

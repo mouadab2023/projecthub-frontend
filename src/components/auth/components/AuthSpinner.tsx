@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Spinner from "../../ui/Spinner";
-const AuthSpinner = ({ loading }) => {
-    const [show, setShow] = useState(false);
+type Props = {
+    loading: boolean;
+}
+const AuthSpinner = ({ loading }:Props) => {
+    const [show, setShow] = useState<boolean>(false);
 
     useEffect(() => {
-        let timer;
+        let timer: NodeJS.Timeout;
         if (loading) {
             timer = setTimeout(() => setShow(true), 100);
         } else {

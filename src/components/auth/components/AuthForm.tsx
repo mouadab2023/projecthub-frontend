@@ -1,7 +1,15 @@
-import React from "react";
+import React, {type ReactNode} from "react";
 import Button from "../../ui/Button";
-
-const AuthForm = ({introduction, title, onSubmit, children, submitLabel, canSubmit, footer}) => {
+type AuthFormProps = {
+    introduction: string;
+    title: string;
+    onSubmit: (e:React.FormEvent<HTMLFormElement>) => void;
+    children: ReactNode;
+    submitLabel:string;
+    canSubmit:boolean;
+    footer?:ReactNode;
+}
+const AuthForm = ({introduction, title, onSubmit, children, submitLabel, canSubmit, footer}:AuthFormProps) => {
     return (
         <div
             className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-500">

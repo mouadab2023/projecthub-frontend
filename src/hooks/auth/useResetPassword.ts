@@ -1,23 +1,22 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {emailIsValid} from "../utils/authUtils";
-import authService from "../../services/authService";
 
 
 const useResetPassword = () => {
 
-        const [email, setEmail] = useState("");
-        const [errorMessage,setErrorMessage] = useState("")
+        const [email, setEmail] = useState<string>("");
+        const [errorMessage,setErrorMessage] = useState<string>("")
 
-        const canSubmit = emailIsValid(email);
+        const canSubmit:boolean = emailIsValid(email);
         const emailError = !emailIsValid(email) && email.length > 0 ? "email is invalid" : "";
 
-        const handleMailInput = (e) => {
+        const handleMailInput = (e:React.ChangeEvent<HTMLInputElement>) => {
             const newEmail = e.target.value;
             setEmail(newEmail);
         }
         const resetPassword = async () => {}
 
-        const handleFormSubmit = (e) => {
+        const handleFormSubmit = (e:React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
         }
         return (
