@@ -4,10 +4,10 @@ export type Props = {
 }
 const ErrorMessage = ({errorMessage}:Props) => {
        return(
-           errorMessage &&
+           errorMessage ?
         <p className="text-sm text-red-500 mt-1">
             {errorMessage}
-        </p>
+        </p>:<></>
        )
 }
 export default ErrorMessage;

@@ -10,8 +10,9 @@ import AuthProvider from "./providers/AuthProvider";
 import FloatingThemeSwitch from "./components/Theme/FloatingThemeSwitch";
 import GuestGuard from "./components/guards/GuestGuard";
 import ProtectedRoutes from "./components/guards/ProtectedRoutes";
-import Dashboard from "./components/dashboard/Dashboard";
+import {Dashboard} from "./components/dashboard/Dashboard";
 import AuthSpinner from "./components/auth/components/AuthSpinner";
+import AppToaster from "./components/ui/AppToaster";
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                     </BrowserRouter>
                 </AuthProvider>
                 <FloatingThemeSwitch/>
+                <AppToaster/>
             </ThemeProvider>
         </div>
     );
