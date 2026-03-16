@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const ColumnButton = ({addColumn}: { addColumn: (name: string) => void }) => {
+const AddColumnButton = ({addColumn}: { addColumn: (name: string) => void }) => {
     const [isEditing, setEditing] = useState<boolean>(false);
     const [columnName, setColumnName] = useState("");
     return (
@@ -88,4 +88,4 @@ const ColumnButton = ({addColumn}: { addColumn: (name: string) => void }) => {
         )
     );
 };
-export default ColumnButton;
+export default AddColumnButton;

@@ -4,3 +4,4 @@ export type Item={
     isChecked:boolean,
     position:number,
 }
+export default Item;

@@ -2,7 +2,7 @@
 import { createPortal } from "react-dom";
 import { useState } from "react";
 import type {Priority} from "../../types/priority";
-import type {TaskForm} from "./Dashboard";
+import type {TaskForm} from "./Board";
 
 
 

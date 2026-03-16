@@ -4,7 +4,7 @@ const FloatingThemeSwitch = () => {
     const { isDark, setIsDark } = useTheme();
 
     return (
-        <div className="fixed bottom-16 right-16 z-50">
+        <div className="fixed bottom-16 left-16 z-50">
             <button
                 onClick={() => setIsDark(!isDark)}
                 className="

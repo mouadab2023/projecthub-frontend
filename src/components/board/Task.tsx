@@ -23,7 +23,7 @@ const Task = ({projectId,columnId,task,removeTask }: Props) => {
     } = useSortable({
         id: 'task-' + task.id,
         data: {
-            type: 'item',
+            type: 'task',
             task,
             columnId
         }

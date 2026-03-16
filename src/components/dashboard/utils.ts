@@ -1,6 +1,7 @@
 import type {ProjectBoard} from "../../types/project";
 import {arrayMove} from "@dnd-kit/sortable";
 import type {ColumnDetails} from "../../types/column";
+import Item from "../../types/item";
 
 export const handleSortColumns = (board:ProjectBoard|null,event:any)=>{
     if (!board) return board
@@ -22,7 +23,7 @@ export const handleSortTasks = (board:ProjectBoard|null,event:any)=>{
     if (!over) return board
     const sourceColumnIndex = getColumnIndexByTaskId(board, parseInt(active.id.split("-")[1], 10))
     let destinationColumnIndex;
-    if(over?.data.current?.type==="item"){
+    if(over?.data.current?.type==="task"){
         let taskId=parseInt(over.id.split("-")[1], 10);
         destinationColumnIndex = getColumnIndexByTaskId(board,taskId)
     }
@@ -60,7 +61,7 @@ const moveTaskBetweenColumn= (active:any ,over:any,columns:ColumnDetails[],sourc
     )
     let newDestinationTasks = [...destinationColumn.tasks]
     let updatedColumns:ColumnDetails[];
-    if (over?.data.current?.type === "item") {
+    if (over?.data.current?.type === "task") {
         console.log(over?.data)
         const overTaskId = parseInt(over.id.split("-")[1], 10);
         const destinationTaskIndex = destinationColumn.tasks.findIndex(task => task.id === overTaskId);
@@ -100,6 +101,15 @@ const getColumnIndexByTaskId = (board: ProjectBoard, taskId: number): number => 
         (column.tasks || []).some((task) => task.id === taskId)
     );
 };
+export const handleSortItems = (items:Item[],event:any)=>{
+    const {active, over} = event;
+    if(!over) return items;
+    if (active.id === over.id) return items;
+    const initialIndex =items.findIndex(item => item.id === parseInt(active.id.split("-")[1], 10));
+    const newIndex = items.findIndex(item => item.id === parseInt(over.id.split("-")[1], 10));
+    const newOrderItems = arrayMove(items, initialIndex, newIndex);
+    return [...newOrderItems]
+}
 
 
 

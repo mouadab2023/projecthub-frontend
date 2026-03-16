@@ -4,27 +4,33 @@ import boardService from "../services/boardService";
 import type {Column as ColumnType, ColumnDetails} from "../types/column";
 import toast from "react-hot-toast";
 import type {Task as TaskType} from "../types/task";
-import type {TaskForm} from "../components/dashboard/Dashboard";
+import type {TaskForm} from "../components/board/Board";
 import type {DragEndEvent} from "@dnd-kit/core";
 import {handleSortColumns} from "../components/dashboard/utils";
+import {useNavigate} from "react-router-dom";
+import item from "../components/board/Item";
 
 const useBoard = (projectId:number) => {
     const [board, setBoard] = useState<ProjectBoard | null>(null);
+    const [boardSnapshot, setBoardSnapshot] = useState<ProjectBoard | null>(null);
+    const navigate =useNavigate()
 
     useEffect(() => {
         const fetchBoard = async () => {
             try {
                 const result = await boardService.getBoard(projectId);
                 setBoard(result.data);
-            } catch (err) {
-                console.error(err);
+            } catch (err:any) {
+                if(err.status===404){
+                    navigate("/404",{ replace: true });
+                }
             }
         };
         fetchBoard();
     }, [projectId]);
 
     const addColumn = async (name: string) => {
-        const boardSnapshot = board;
+        setBoardSnapshot(board);
         const tempId = Date.now();
         let newColumn: ColumnDetails = {
             id: tempId,
@@ -55,9 +61,28 @@ const useBoard = (projectId:number) => {
             toast.error("Could not add column, try again later");
         }
     };
-
+    const editColumn = async (id:number,name: string) => {
+        setBoardSnapshot(board);
+        const editedColumn = board?.columns.find(c => c.id === id);
+        if (!editedColumn) return;
+        const updateColumn={...editedColumn,name: name};
+        setBoard(prevState =>{
+            if (!prevState) return prevState;
+            return {...prevState, columns:  prevState.columns.map(c => c.id === id ? updateColumn : c)};
+        });
+        toast.loading("Loading...")
+        try {
+            await boardService.editColumn(projectId,id,updateColumn);
+            toast.dismiss();
+            toast.success("Column updated successfully");
+        }catch(err:any){
+            setBoard(boardSnapshot);
+            toast.dismiss();
+            toast.error("Could not update the column, try again later");
+        }
+    }
     const removeColumn = async (column: ColumnDetails | ColumnType) => {
-        const boardSnapshot = board;
+        setBoardSnapshot(board);
         setBoard(prevBoard => {
             if (!prevBoard) return prevBoard;
             return {
@@ -72,13 +97,13 @@ const useBoard = (projectId:number) => {
             toast.success("Column removed successfully");
         } catch (err) {
             setBoard(boardSnapshot);
+            toast.dismiss();
             toast.error("Could not remove column, try again later");
         }
     };
 
-
     const addTask=async (task:TaskForm)=>{
-        const boardSnapshot = board;
+        setBoardSnapshot(board);
         const tempId = Date.now();
         const columnIndex=board?.columns.findIndex(column=>column.id===task.columnId);
         if (columnIndex ===-1 || columnIndex===undefined) return;
@@ -103,7 +128,6 @@ const useBoard = (projectId:number) => {
         });
         try{
             toast.loading("Loading...");
-            console.log(newTask);
             const result = await boardService.addTask(projectId,columnId,newTask);
             toast.dismiss();
             toast.success("Task added successfully");
@@ -129,7 +153,7 @@ const useBoard = (projectId:number) => {
         }
     }
     const removeTask= async (columnId:number,taskId:number)=>{
-        const boardSnapshot = board;
+        setBoardSnapshot(board);
         setBoard(prevState => {
             if (!prevState) return prevState;
             const columnIndex=prevState.columns.findIndex(column=>column.id===columnId);
@@ -151,14 +175,14 @@ const useBoard = (projectId:number) => {
             toast.success("Task removed successfully");
         }catch(err) {
             setBoard(boardSnapshot);
+            toast.dismiss();
             toast.error("Could not remove task, try again later");
         }
     }
+
     const moveColumn = async (e: DragEndEvent, activeColumn: ColumnDetails) => {
-        const boardSnapshot = board;
         let newPosition = -1;
         let oldPosition = -1;
-
         setBoard(prevState => {
             oldPosition = prevState?.columns.findIndex(c => c.id === activeColumn.id) ?? -1;
             const updated = handleSortColumns(prevState, e) ?? prevState;
@@ -174,12 +198,12 @@ const useBoard = (projectId:number) => {
                 toast.success("Column moved successfully");
             } catch (err) {
                 setBoard(boardSnapshot);
+                toast.dismiss();
                 toast.error("Could not move the column, try again later");
             }
         }
     };
     const moveTask = async (oldColumnId:number|null, activeTask: TaskType) => {
-        const boardSnapshot = board;
         let column= board?.columns.find(column =>column.tasks.findIndex(task => task.id === activeTask.id)!==-1);
         let taskIndex= column?.tasks.findIndex(task => task.id === activeTask.id);
         if (column !== undefined && taskIndex !== undefined && taskIndex !== -1  && oldColumnId !== null &&
@@ -211,6 +235,7 @@ const useBoard = (projectId:number) => {
                 );
             }catch(err) {
                 setBoard(boardSnapshot);
+                toast.dismiss();
                 toast.error("Could not move the task, try again later");
             }
         }
@@ -224,7 +249,8 @@ const useBoard = (projectId:number) => {
         removeTask,
         moveColumn,
         moveTask,
-
+        setBoardSnapshot,
+        editColumn
     }
 }
 export default useBoard;

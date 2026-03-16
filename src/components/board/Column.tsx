@@ -5,7 +5,7 @@ import type {Column as ColumnType, ColumnDetails} from "../../types/column";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from '@dnd-kit/utilities';
 import CreateTaskModal from "./CreateTaskModal";
-import type {TaskForm} from "./Dashboard";
+import type {TaskForm} from "./Board";
 
 type Props = {
     projectId?:number,
@@ -13,10 +13,13 @@ type Props = {
     addTask?: (task: TaskForm) => void
     removeColumn?: (column: ColumnDetails | ColumnType) => void
     removeTask?: (columnId:number,taskId:number) => void
+    editColumn?: (id: number,name:string) => void
 }
-const Column = ({projectId,column,addTask,removeColumn,removeTask}: Props) => {
+const Column = ({projectId,column,addTask,removeColumn,removeTask,editColumn}: Props) => {
+    const [isEditing, setEditing] = useState<boolean>(false);
+    const [columnName, setColumnName] = useState(column.name);
     const [isModalOpen, setModalOpen] = useState(false);
-    const isOverlay = projectId===undefined || !removeTask || !removeColumn || !addTask;
+    const isOverlay = projectId===undefined || !removeTask || !removeColumn || !addTask || !editColumn;
     const {
         attributes,
         listeners,
@@ -41,7 +44,6 @@ const Column = ({projectId,column,addTask,removeColumn,removeTask}: Props) => {
         transition,
     };
 
-    // isDragging → ghost placeholder
     if (isDragging) {
         return (
             <div
@@ -86,9 +88,43 @@ const Column = ({projectId,column,addTask,removeColumn,removeTask}: Props) => {
             >
                 <div className="flex items-center gap-2 min-w-0">
                     <span className="shrink-0 w-2 h-2 rounded-full bg-indigo-400 dark:bg-indigo-500"/>
-                    <h2 className="text-sm font-semibold tracking-tight truncate text-gray-700 dark:text-gray-100">
-                        {column?.name || "Untitled"}
-                    </h2>
+                    {
+                        isEditing?(
+                            <input
+                            defaultValue={column.name}
+                            onBlur={() => {
+                                if (editColumn && columnName!==column.name && columnName.trim()!== "")
+                                    editColumn(column.id, columnName);
+                                setEditing(false);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter"){
+                                    if (editColumn && columnName !== column.name && columnName.trim() !== "") {
+                                        editColumn(column.id, columnName);
+                                    }
+                                    setEditing(false);
+                                }
+                                if (e.key === "Escape") setEditing(false);
+                            }}
+                            onChange={(e) => {
+                                setColumnName(e.target.value);
+                            }}
+                            autoFocus
+                            className="
+                            text-sm font-semibold tracking-tight
+                            text-gray-700 dark:text-gray-100
+                            bg-transparent
+                            border-b border-indigo-400 dark:border-indigo-500
+                            outline-none
+                            w-full
+                            pb-0.5
+                            "
+                        />):(
+                            <h2 onDoubleClick={()=>setEditing(true)} className="text-sm font-semibold tracking-tight truncate text-gray-700 dark:text-gray-100">
+                                {column?.name || "Untitled"}
+                            </h2>
+                        )
+                    }
                     <span className="shrink-0 text-xs text-gray-300 dark:text-gray-600 font-normal">
                         / {column?.tasks?.length ?? 0}
                     </span>

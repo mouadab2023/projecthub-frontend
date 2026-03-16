@@ -10,9 +10,10 @@ import AuthProvider from "./providers/AuthProvider";
 import FloatingThemeSwitch from "./components/Theme/FloatingThemeSwitch";
 import GuestGuard from "./components/guards/GuestGuard";
 import ProtectedRoutes from "./components/guards/ProtectedRoutes";
-import {Dashboard} from "./components/dashboard/Dashboard";
 import AuthSpinner from "./components/auth/components/AuthSpinner";
 import AppToaster from "./components/ui/AppToaster";
+import DashBoard from "./components/dashboard/DashBoard";
+import Board from "./components/board/Board";
 
 function App() {
     return (
@@ -28,7 +29,9 @@ function App() {
                                 <Route path="/reset-password" element={<ResetPassword/>}/>
                             </Route>
                             <Route  element={<ProtectedRoutes/>}>
-                                <Route path="/dashboard" element={<Dashboard/>}/>
+                                <Route path="/dashboard" element={<DashBoard/>}/>
+                                <Route path="/board/:id" element={<Board/>} />
+
                             </Route>
                             <Route   path={"/spin"} element={<AuthSpinner loading={true}/>}>
                             </Route>

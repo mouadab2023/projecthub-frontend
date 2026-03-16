@@ -1,10 +1,10 @@
 import type {Column, ColumnDetails} from "./column";
 import type {projectMember} from "./projectMember";
 
-type Project = {
+export type Project = {
     id:number,
     name:string,
-    creationDate:Date,
+    creationDate:string,
 
 }
 export type ProjectDetails = Project & {

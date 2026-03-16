@@ -2,6 +2,7 @@ import React, {createContext, type ReactNode, useEffect, useRef, useState} from 
 import authService from "../services/authService";
 import axiosInstance from "../services/api";
 import type {User,UserLogin} from "../types/user"
+import toast from "react-hot-toast";
 
 type AuthContextType = {
     user: User | null;
@@ -67,7 +68,6 @@ const AuthProvider = ({children}:Props) => {
             (res) => res,
             async (error) => {
                 const config = error.config as any;
-
                 if (!config) {
                     return Promise.reject(error);
                 }
@@ -80,6 +80,7 @@ const AuthProvider = ({children}:Props) => {
                 if (config.url?.includes("/auth/refresh")) {
                     return Promise.reject(error);
                 }
+                console.log(10)
                 if (config._retried) {
                     await logout();
                     return Promise.reject(error);
@@ -110,11 +111,15 @@ const AuthProvider = ({children}:Props) => {
                 setJwtToken(res.data.token);
                 tokenRef.current = res.data.token;
                 setExpiresIn(res.data.expiresIn)
-            }catch(err){
-                setUser(null);
-                setJwtToken(null);
-                setExpiresIn(null)
-                } finally{
+            }catch(err:any){
+                if(err.response){
+                    setUser(null);
+                    setJwtToken(null);
+                    setExpiresIn(null)
+                }else{
+                    toast.error("Unable to connect to the server");
+                }
+            } finally{
                 setInitialLoading(false);
             }
         }
