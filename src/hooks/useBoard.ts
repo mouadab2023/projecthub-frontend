@@ -8,7 +8,7 @@ import type {TaskForm} from "../components/board/Board";
 import type {DragEndEvent} from "@dnd-kit/core";
 import {handleSortColumns} from "../components/dashboard/utils";
 import {useNavigate} from "react-router-dom";
-import item from "../components/board/Item";
+import item from "../components/board/item/Item";
 
 const useBoard = (projectId:number) => {
     const [board, setBoard] = useState<ProjectBoard | null>(null);

@@ -1,4 +1,4 @@
-import type { Task as TaskType } from "../../types/task";
+import type { Task as TaskType } from "../../../types/task";
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from "@dnd-kit/utilities";
 import ShowTaskModal from "./ShowTaskModal";

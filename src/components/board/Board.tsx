@@ -1,10 +1,10 @@
 import React, { useRef, useState} from 'react';
 import type {Task as TaskType} from "../../types/task";
-import Task from "./Task";
+import Task from "./task/Task";
 import type { ColumnDetails} from "../../types/column";
 import {SortableContext} from "@dnd-kit/sortable";
 import { handleSortTasks} from "../dashboard/utils";
-import Column from "./Column";
+import Column from "./column/Column";
 import {
     DndContext,
     type DragEndEvent,
@@ -21,7 +21,7 @@ import useBoard from "../../hooks/useBoard";
 import {Navigate, useParams} from "react-router-dom";
 import BoardBar from "./BoardBar";
 import Loading from "../ui/Loading";
-import AddColumnButton from "./AddColumnButton";
+import AddColumnButton from "./column/AddColumnButton";
 import MembersBar from "./MembersBar";
 
 export type TaskForm = {

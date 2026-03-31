@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import type {Task as TaskType} from "../../types/task";
-import Task from "./Task"
-import type {Column as ColumnType, ColumnDetails} from "../../types/column";
+import type {Task as TaskType} from "../../../types/task";
+import Task from "../task/Task"
+import type {Column as ColumnType, ColumnDetails} from "../../../types/column";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from '@dnd-kit/utilities';
-import CreateTaskModal from "./CreateTaskModal";
-import type {TaskForm} from "./Board";
+import CreateTaskModal from "../task/CreateTaskModal";
+import type {TaskForm} from "../Board";
 
 type Props = {
     projectId?:number,

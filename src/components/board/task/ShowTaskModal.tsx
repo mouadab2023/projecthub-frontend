@@ -1,11 +1,12 @@
 import {createPortal} from "react-dom";
-import type {TaskDetails} from "../../types/task";
+import type {TaskDetails} from "../../../types/task";
 import {useEffect, useState} from "react";
-import boardService from "../../services/boardService";
+import boardService from "../../../services/boardService";
 import toast from "react-hot-toast";
 import {priorityConfig} from "./CreateTaskModal";
-import ItemsList from "./ItemsList";
-import Item from "../../types/item";
+import ItemsList from "../item/ItemsList";
+import Item, {type Item as ItemType} from "../../../types/item";
+import {handleSortItems} from "../../dashboard/utils";
 
 type Props={
     projectId:number,
@@ -57,13 +58,57 @@ const ShowTaskModal=({projectId,columnId,taskId,isOpen,onClose,removeTask}:Props
             toast.error("Could not add item, try again later");
         }
     }
- const setCheckItem=(id:number,checked:boolean)=>{
-        const updatedItems=items.map(i=>{
-            if (i.id===id) return {...i,isChecked:checked};
-            return i;
+    const changeItemPosition=async (e:any,activeItem:ItemType)=>
+    {
+        let oldPosition=-1;
+        let newPosition=-1;
+        setItems((prevState:ItemType[]) =>{
+            oldPosition = prevState?.findIndex(i => i.id === activeItem.id) ?? -1;
+            const updated= handleSortItems(prevState,e);
+            newPosition = updated?.findIndex(i => i.id === activeItem.id) ?? -1;
+            return updated;
         });
-        setItems(updatedItems);
- }
+        if (newPosition !== -1 && oldPosition !== -1 && oldPosition !== newPosition) {
+            try {
+                toast.loading("Loading...");
+                console.log("new position", newPosition);
+                await boardService.changeItemPosition(projectId,columnId,taskId,activeItem.id,newPosition);
+                toast.dismiss();
+                toast.success("Item moved successfully");
+
+            }catch (err){
+                setItems(itemsSnapshot);
+                toast.dismiss();
+                toast.error("Could not move the item, try again later");
+            }
+        }
+
+    }
+     const setCheckItem= async (id:number,checked:boolean)=>
+     {
+         setItemsSnapshot(items);
+         let checkedItem:Item|null=null;
+            const updatedItems=items.map(i=>{
+                if (i.id===id) {
+                    checkedItem={...i,isChecked:checked};
+                    return checkedItem ;
+                }
+                return i;
+            });
+            setItems(updatedItems);
+            if(checkedItem){
+                try {
+                    toast.loading("Loading...");
+                    await boardService.updateItem(projectId,columnId,taskId,id,checkedItem);
+                    toast.dismiss();
+                    toast.success("Item updated successfully");
+                }catch (err){
+                    setItems(itemsSnapshot);
+                    toast.dismiss();
+                    toast.error("Could not update the item, try again later");
+                }
+            }
+     }
 
     if (!isOpen) return null;
 
@@ -135,7 +180,7 @@ const ShowTaskModal=({projectId,columnId,taskId,isOpen,onClose,removeTask}:Props
                             </div>
 
                             {/* Checklist */}
-                            <ItemsList items={items} setItems={setItems}  addItem={addItem} setCheckItem={setCheckItem} />
+                            <ItemsList items={items} setItems={setItems}  addItem={addItem} setCheckItem={setCheckItem} setItemsSnapshot={setItemsSnapshot} changeItemPosition={changeItemPosition} />
 
                         </div>
 

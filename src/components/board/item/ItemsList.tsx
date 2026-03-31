@@ -1,4 +1,4 @@
-import type {Item as ItemType} from "../../types/item";
+import type {Item as ItemType} from "../../../types/item";
 import {SortableContext} from "@dnd-kit/sortable";
 import Item from "./Item";
 import React, {useState} from "react";
@@ -12,15 +12,18 @@ import {
     useSensor,
     useSensors
 } from "@dnd-kit/core";
-import {handleSortItems} from "../dashboard/utils";
+import {handleSortItems} from "../../dashboard/utils";
+import boardService from "../../../services/boardService";
 
 type Props = {
     items:ItemType[],
     addItem:(name:string)=>void,
     setItems:any,
     setCheckItem:(id:number,checked:boolean)=>void,
+    setItemsSnapshot:(items:ItemType[]) => void,
+    changeItemPosition:(e:DragEndEvent,activeItem:ItemType) => void,
 }
-const ItemsList=({items,setItems,addItem,setCheckItem}:Props)=>{
+const ItemsList=({items,setItems,addItem,setCheckItem,setItemsSnapshot,changeItemPosition}:Props)=>{
     const [isAddingItem,setIsAddingItem]=useState(false);
     const [itemName, setItemName]=useState("");
     const [activeItem, setActiveItem]=useState<ItemType| null>(null);
@@ -32,17 +35,19 @@ const ItemsList=({items,setItems,addItem,setCheckItem}:Props)=>{
     function onDragStart(e: DragStartEvent) {
         if (e.active.data.current?.type === "item") {
             setActiveItem(e.active.data.current?.item);
+            setItemsSnapshot(items);
             return;
         }
     }
     function onDragOver(e: DragOverEvent) {
         const isActiveItem = e.active.data.current?.type === "item";
         if (!isActiveItem) return;
-        setItems((prevState:ItemType[]) => handleSortItems(prevState,e))
     }
     async function onDragEnd(e: DragEndEvent) {
         const isActiveItem = e.active.data.current?.type === "item";
-        //api call to persist the move of items
+        if(isActiveItem && activeItem) {
+            await changeItemPosition(e,activeItem);
+        }
         setActiveItem(null);
     }
     return (
@@ -66,7 +71,7 @@ const ItemsList=({items,setItems,addItem,setCheckItem}:Props)=>{
                 </div>
             )}
 
-            <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} >
+            <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd}>
             <ul className="flex flex-col gap-0.5 mt-1">
                 <SortableContext items={items.map(i => "item-" + i.id)}>
                     {items.map(item => (

@@ -22,6 +22,8 @@ const  boardService = {
         getTaskDetails:(projectId:number,columnId:number,taskId:number)=>axiosInstance.get<TaskDetails>(`/projects/${projectId}/columns/${columnId}/tasks/${taskId}`),
 
         addItem:(projectId:number,columnId:number,taskId:number,item:Item)=>axiosInstance.post<Item>(`/projects/${projectId}/columns/${columnId}/tasks/${taskId}/items`,item),
+        changeItemPosition:(projectId:number,columnId:number,taskId:number,itemId:number,newPosition:number)=>axiosInstance.patch<Item>(`/projects/${projectId}/columns/${columnId}/tasks/${taskId}/items/${itemId}/position`,{newPosition:newPosition}),
+        updateItem:(projectId:number,columnId:number,taskId:number,itemId:number,item:Item)=>axiosInstance.put<Item>(`/projects/${projectId}/columns/${columnId}/tasks/${taskId}/items/${itemId}`,item),
 
 }
 export default boardService;

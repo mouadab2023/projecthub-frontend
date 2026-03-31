@@ -1,5 +1,5 @@
 import {useSortable} from "@dnd-kit/sortable";
-import type {Item as TypeItem} from "../../types/item";
+import type {Item as TypeItem} from "../../../types/item";
 import {CSS} from "@dnd-kit/utilities";
 type Props = {item:TypeItem,
     setCheckItem?:(id:number,checked:boolean)=>void}
